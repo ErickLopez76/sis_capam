@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include sis_capam *.css
+recursive-include sis_capam *.csv
+recursive-include sis_capam *.html
+recursive-include sis_capam *.ico
+recursive-include sis_capam *.js
+recursive-include sis_capam *.json
+recursive-include sis_capam *.md
+recursive-include sis_capam *.png
+recursive-include sis_capam *.py
+recursive-include sis_capam *.svg
+recursive-include sis_capam *.txt
+recursive-exclude sis_capam *.pyc
