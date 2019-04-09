@@ -3,6 +3,13 @@
 
 frappe.ui.form.on('ExpedienteAM', {
 	refresh: function(frm) {
+		calculate_puntuation(frm);
+		calculate_ingresos(frm);
+	}
+});
+
+frappe.ui.form.on('ExpedienteAM', {
+	on_load: function(frm) {
 
 	}
 });
@@ -25,6 +32,73 @@ frappe.ui.form.on("ExpedienteAM","edad", function(frm){
 	//	console.log('hola');
 	//}
 });
+
+frappe.ui.form.on("ExpedienteAM","situacion_familiar", function(frm){
+	calculate_puntuation(frm);
+});
+
+frappe.ui.form.on("ExpedienteAM","situacion_economica", function(frm){
+	calculate_puntuation(frm);
+});
+frappe.ui.form.on("ExpedienteAM","vivienda_adecuada", function(frm){
+	calculate_puntuation(frm);
+});
+frappe.ui.form.on("ExpedienteAM","relaciones_sociales", function(frm){
+	calculate_puntuation(frm);
+});
+frappe.ui.form.on("ExpedienteAM","red_social_apoyo", function(frm){
+	calculate_puntuation(frm);
+});
+
+
+function calculate_puntuation(frm){
+	var pt  = frm.doc.situacion_familiar;
+	var se 	= frm.doc.situacion_economica;
+	var va  = frm.doc.vivienda_adecuada;
+	var rs  = frm.doc.relaciones_sociales;
+	var ra  = frm.doc.red_social_apoyo;
+	//alert(pt);
+	var npt = Number(pt.substring(0,1));
+	var nse	= Number(se.substring(0,1));
+	var nva = Number(va.substring(0,1));
+	var nrs = Number(rs.substring(0,1));
+	var nra = Number(ra.substring(0,1));
+	//npt = npt + 6;
+	// alert(npt);
+	frm.set_value("puntuacion_total",npt + nse + nva + nrs + nra);
+
+}
+
+frappe.ui.form.on("ExpedienteAM","sec2_pension_salario", function(frm){
+	calculate_ingresos(frm);
+});
+frappe.ui.form.on("ExpedienteAM","sec2_ingresos_serv_comercio", function(frm){
+	calculate_ingresos(frm);
+});
+frappe.ui.form.on("ExpedienteAM","sec2_bono", function(frm){
+	calculate_ingresos(frm);
+});
+frappe.ui.form.on("ExpedienteAM","sec2_remesas", function(frm){
+	calculate_ingresos(frm);
+});
+frappe.ui.form.on("ExpedienteAM","sec2_cuotas", function(frm){
+	calculate_ingresos(frm);
+});
+frappe.ui.form.on("ExpedienteAM","sec2_otros", function(frm){
+	calculate_ingresos(frm);
+});
+
+
+function calculate_ingresos(frm) {
+	var ps = frm.doc.sec2_pension_salario;
+	var sc = frm.doc.sec2_ingresos_serv_comercio;
+	var bo = frm.doc.sec2_bono;
+	var re = frm.doc.sec2_remesas;
+	var cf = frm.doc.sec2_cuotas;
+	var ot = frm.doc.sec2_otros;
+
+	frm.set_value("sec2_total_ingresos",ps + sc + bo + re + cf + ot);
+}
 
 frappe.ui.form.on("ExpedienteAM","btnedad", function(frm){
 	//frm.set_df_property("fecha_nacimiento","read_only",1);
