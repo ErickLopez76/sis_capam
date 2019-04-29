@@ -5,6 +5,7 @@ frappe.ui.form.on('ExpedienteAM', {
 	refresh: function(frm) {
 		calculate_puntuation(frm);
 		calculate_ingresos(frm);
+		
 	}
 });
 
@@ -13,6 +14,36 @@ frappe.ui.form.on('ExpedienteAM', {
 
 	}
 });
+
+frappe.ui.form.on('ExpedienteAM', {
+	before_save: function(frm) {
+		var pn = frm.doc.primer_nombre;
+		var pa = frm.doc.primer_apellido;
+		var cp = frm.doc.conocido_por;
+		frm.set_value('nombre_completo', pn + ' ' + pa + ', ' + cp);
+	}
+});
+
+
+frappe.ui.form.on('ExpedienteAM', {
+	after_save: function(frm) {
+		var fc = frappe.model.get_new_doc("Ficha_Clinica");
+		var curr_exp = frm.doc.name;
+		//alert(frm.doc.__islocal);
+		fc.codigo=curr_exp;
+
+		//	alert("crea ficha");
+		frappe.call({
+                method: "sis_capam.sis_capam.doctype.expedienteam.expedienteam.newFc",
+                args: {
+                        doc_name: curr_exp
+                }
+        });
+		
+		//frappe.set_route("Form", "Ficha_Clinica", fc.name);
+	}
+});
+
 
 frappe.ui.form.on("ExpedienteAM","fecha_nacimiento", function(frm){
 	var parts =frm.doc.fecha_nacimiento.split('-');
@@ -68,6 +99,13 @@ function calculate_puntuation(frm){
 	frm.set_value("puntuacion_total",npt + nse + nva + nrs + nra);
 
 }
+
+frappe.ui.form.on("ExpedienteAM","btn_ficha_salud", function(frm){
+	var doc = frm.doc;
+	var docname = frm.doc.name;
+	//alert(doc.__islocal);
+	frappe.set_route("Form", "Ficha_Clinica", docname);
+});
 
 frappe.ui.form.on("ExpedienteAM","sec2_pension_salario", function(frm){
 	calculate_ingresos(frm);
